@@ -9,7 +9,7 @@ class SmsConnect
 	/** @var array */
 	private $authData;
 
-	const API_URL = 'http://api.smsbrana.cz/smsconnect/http.php';
+	const API_URL = 'https://api.smsbrana.cz/smsconnect/http.php';
 
 	const ACTION_SEND_SMS = 'send_sms';
 
@@ -80,7 +80,7 @@ class SmsConnect
 
 		$authData = array(
 			'login' => $login,
-			'sul' => $salt,
+			'salt' => $salt,
 			'time' => $time,
 			'hash' => md5($password . $time . $salt),
 		);
