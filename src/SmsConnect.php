@@ -76,7 +76,7 @@ class SmsConnect
 		}
 
 		$time = date("Ymd")."T".date("His");
-		$salt = $this->getSalt(10);
+		$salt = $this->getSalt(20);
 
 		$authData = array(
 			'login' => $login,
@@ -109,7 +109,7 @@ class SmsConnect
 	 * @return string
 	 */
 	protected function getSalt($length = 10) {
-	    $characters = '0123456789abcdefghijklmnopqrstuvwxyz';
+	    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ:';
 	    $string = '';
 	    for ($p = 0; $p < $length; $p++) {
 	        $string .= $characters[mt_rand(0, strlen($characters - 1))];
