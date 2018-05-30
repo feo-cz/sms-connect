@@ -110,9 +110,10 @@ class SmsConnect
 	 */
 	protected function getSalt($length = 10) {
 	    $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ:';
+	    $maxPos = strlen($characters) - 1;
 	    $string = '';
 	    for ($p = 0; $p < $length; $p++) {
-	        $string .= $characters[mt_rand(0, strlen($characters - 1))];
+	        $string .= $characters[mt_rand(0, $maxPos)];
 	    }
 
 	    return $string;
