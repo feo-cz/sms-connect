@@ -44,9 +44,10 @@ class SmsConnect
 	 */
 	public function getInbox()
 	{
-		$this->authData['action'] = self::ACTION_INBOX;
+	    $data = $this->getAuth();
+		$data['action'] = self::ACTION_INBOX;
 
-		$requestUrl = $this->getRequestUrl($this->getAuth());
+		$requestUrl = $this->getRequestUrl($data);
 		$response = $this->getRequest($requestUrl);
 
 		return $response;
@@ -60,11 +61,12 @@ class SmsConnect
 	 */
 	public function sendSms($number, $text)
 	{
-		$this->authData['action'] = self::ACTION_SEND_SMS;
-		$this->authData['number'] = $number;
-		$this->authData['message'] = urlencode($text);
+	    $data = $this->getAuth();
+		$data['action'] = self::ACTION_SEND_SMS;
+		$data['number'] = $number;
+		$data['message'] = urlencode($text);
 
-		$requestUrl = $this->getRequestUrl($this->getAuth());
+		$requestUrl = $this->getRequestUrl($data);
 		$response = $this->getRequest($requestUrl);
 
 		return $response;
