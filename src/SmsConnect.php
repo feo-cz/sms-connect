@@ -5,9 +5,11 @@ namespace Neogate\SmsConnect;
 
 class SmsConnect
 {
+    /** @var string */
+    private $login;
 
-	/** @var array */
-	private $authData;
+    /** @var string */
+    private $password;
 
 	const API_URL = 'https://api.smsbrana.cz/smsconnect/http.php';
 
@@ -24,7 +26,16 @@ class SmsConnect
 	 */
 	public function __construct($login, $password)
 	{
-		$this->authData = $this->getAuth($login, $password);
+        if ($login === NULL) {
+            throw new InvalidArgumentException('Empty login');
+        }
+
+        if ($password === NULL) {
+            throw new InvalidArgumentException('Empty password');
+        }
+
+        $this->login    = $login;
+        $this->password = $password;
 	}
 
 
@@ -35,7 +46,7 @@ class SmsConnect
 	{
 		$this->authData['action'] = self::ACTION_INBOX;
 
-		$requestUrl = $this->getRequestUrl($this->authData);
+		$requestUrl = $this->getRequestUrl($this->getAuth());
 		$response = $this->getRequest($requestUrl);
 
 		return $response;
@@ -53,7 +64,7 @@ class SmsConnect
 		$this->authData['number'] = $number;
 		$this->authData['message'] = urlencode($text);
 
-		$requestUrl = $this->getRequestUrl($this->authData);
+		$requestUrl = $this->getRequestUrl($this->getAuth());
 		$response = $this->getRequest($requestUrl);
 
 		return $response;
@@ -61,28 +72,18 @@ class SmsConnect
 
 
 	/**
-	 * @param string $login
-	 * @param string $password
 	 * @return array
 	 */
-	protected function getAuth($login, $password)
+	protected function getAuth()
 	{
-		if ($login === NULL) {
-			throw new InvalidArgumentException('Empty login');
-		}
-
-		if ($password === NULL) {
-			throw new InvalidArgumentException('Empty password');
-		}
-
 		$time = date("Ymd")."T".date("His");
 		$salt = $this->getSalt(20);
 
 		$authData = array(
-			'login' => $login,
+			'login' => $this->login,
 			'salt' => $salt,
 			'time' => $time,
-			'hash' => md5($password . $time . $salt),
+			'hash' => md5($this->password . $time . $salt),
 		);
 
 		return $authData;
